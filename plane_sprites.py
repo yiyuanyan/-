@@ -1,6 +1,8 @@
 import pygame
-
-
+# 屏幕大小的常亮
+SCREEN_RECT = pygame.Rect(0, 0, 480, 700)
+# 刷新帧率
+FRAME_PER_SEC = 60
 # 创建类，继承pygame.sprite.Sprite类
 # 必须调用父类初始化方法__init__
 class GameSprite(pygame.sprite.Sprite):

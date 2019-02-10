@@ -28,6 +28,7 @@ enemy1 = GameSprite("./images/enemy1.png", 2)
 enemy_group = pygame.sprite.Group(enemy, enemy1)
 
 pygame.display.update()
+# 游戏循环
 while True:
     clock.tick(60)
     # 捕获键盘事件

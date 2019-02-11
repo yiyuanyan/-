@@ -1,8 +1,13 @@
 import pygame
+import random
 # 屏幕大小的常亮
 SCREEN_RECT = pygame.Rect(0, 0, 480, 700)
 # 刷新帧率
 FRAME_PER_SEC = 60
+# 创建敌机的定时器常亮
+CREATE_ENEMY_EVENT = pygame.USEREVENT
+
+
 # 创建类，继承pygame.sprite.Sprite类
 # 必须调用父类初始化方法__init__
 class GameSprite(pygame.sprite.Sprite):
@@ -20,9 +25,11 @@ class GameSprite(pygame.sprite.Sprite):
         """在屏幕垂直方向移动"""
         self.rect.y += self.speed
 
+
 class Background(GameSprite):
     """游戏背景精灵"""
-    def __init__(self, is_alt = False):
+
+    def __init__(self, is_alt=False):
         # 1.调用父类方法实现精灵的创建
         super().__init__("./images/background.png")
 
@@ -38,3 +45,29 @@ class Background(GameSprite):
         if self.rect.y >= SCREEN_RECT.height:
             self.rect.y = -self.rect.height
         pass
+
+
+class Enemy(GameSprite):
+    """敌机精灵"""
+
+    def __init__(self):
+        # 1.调用父类方法，创建敌机精灵， 同时指定敌机图片
+        super().__init__("./images/enemy1.png")
+        # 2.指定敌机的初始随机速度
+        self.speed = random.randint(1, 3)
+        # 3.指定敌机的初始随机位置
+        self.rect.bottom = 0
+        max_x = SCREEN_RECT.width - self.rect.width
+        self.rect.x = random.randint(0, max_x)
+
+    def update(self):
+        # 1.调用父类方法，保持垂直方向的飞行
+        super().update()
+        # 2.判断是否飞出屏幕，如果是，则需要从精灵组删除敌机
+        if self.rect.y >= SCREEN_RECT.height:
+            # kill方法可以将精灵从精灵组中移除，精灵就会自动被销毁。
+            self.kill()
+            print("飞出屏幕，需要从精灵组删除.....")
+
+    def __del__(self):
+        print("敌机挂了 %s" % self.rect)

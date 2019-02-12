@@ -25,6 +25,9 @@ class PlaneGame(object):
         self.back_group = pygame.sprite.Group(bg1, bg2)
         # 创建敌机精灵组
         self.enemy_group = pygame.sprite.Group()
+        # 创建英雄精灵和精灵族
+        self.hero = Hero()
+        self.hero_group = pygame.sprite.Group(self.hero)
 
     def start_game(self):
         print("游戏开始")
@@ -43,6 +46,7 @@ class PlaneGame(object):
     def __event_handler(self):
         """事件监听"""
         for event in pygame.event.get():
+            # 按键事件监听
             if event.type == pygame.QUIT:
                 PlaneGame.__game_over()
             elif event.type == CREATE_ENEMY_EVENT:
@@ -50,7 +54,18 @@ class PlaneGame(object):
                 enemy = Enemy()
                 # 2.经敌机精灵添加到精灵组
                 self.enemy_group.add(enemy)
-                print("敌机出场")
+            # elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+            #    print("向右移动....")
+        # 使用键盘模块获取按键事件 支持按键连击模式
+        kyes_pressed = pygame.key.get_pressed()  # 返回的是元组
+        # 判断元组中对应的索引值
+        if kyes_pressed[pygame.K_RIGHT]:
+            print("向右移动.....")
+            self.hero.speed = 3
+        elif kyes_pressed[pygame.K_LEFT]:
+            self.hero.speed = -3
+        else:
+            self.hero.speed = 0
 
     def __check_collide(self):
         """碰撞检测"""
@@ -62,6 +77,9 @@ class PlaneGame(object):
         self.back_group.draw(self.screen)
         self.enemy_group.update()
         self.enemy_group.draw(self.screen)
+
+        self.hero_group.update()
+        self.hero_group.draw(self.screen)
 
     @staticmethod
     def __game_over():

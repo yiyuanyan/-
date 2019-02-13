@@ -16,6 +16,7 @@ class PlaneGame(object):
         self.__create_sprites()
         # 4.设置定时器事件 - 创建敌机
         pygame.time.set_timer(CREATE_ENEMY_EVENT, 1000)
+        pygame.time.set_timer(HERO_FIRE_EVENT, 500)
 
     def __create_sprites(self):
         """私有方法，创建游戏窗口"""
@@ -28,6 +29,7 @@ class PlaneGame(object):
         # 创建英雄精灵和精灵族
         self.hero = Hero()
         self.hero_group = pygame.sprite.Group(self.hero)
+
 
     def start_game(self):
         print("游戏开始")
@@ -56,6 +58,8 @@ class PlaneGame(object):
                 self.enemy_group.add(enemy)
             # elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
             #    print("向右移动....")
+            elif event.type == HERO_FIRE_EVENT:
+                self.hero.fire()
         # 使用键盘模块获取按键事件 支持按键连击模式
         kyes_pressed = pygame.key.get_pressed()  # 返回的是元组
         # 判断元组中对应的索引值
@@ -80,6 +84,9 @@ class PlaneGame(object):
 
         self.hero_group.update()
         self.hero_group.draw(self.screen)
+        # 子弹精灵组
+        self.hero.bullets.update()
+        self.hero.bullets.draw(self.screen)
 
     @staticmethod
     def __game_over():
